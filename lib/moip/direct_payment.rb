@@ -172,13 +172,20 @@ module MoIP
                 }
               end
               
-              xml.Comissoes {
-                xml.Comissionamento {
-                  xml.Razao { xml.text attributes[:razao] }
-                  xml.ValorPercentual { xml.text attributes[:valor_percentual] }
-                  xml.ValorFixo { xml.text attributes[:valor_fixo] }
-                }
-              }  
+              if !attributes[:comissoes].nil?
+                xml.Comissoes {
+                  xml.Comissionamento {
+                    xml.Razao { xml.text attributes[:comissoes][:razao] }
+                    xml.ValorPercentual { xml.text attributes[:comissoes][:valor_percentual] }
+                    xml.ValorFixo { xml.text attributes[:comissoes][:valor_fixo] }
+                    xml.MostrarParaPagador { xml.text attributes[:comissoes][:mostrar_para_pagador] }
+                    xml.Parcelada { xml.text attributes[:comissoes][:parcelada] }
+                    xml.Comissionado {
+                      xml.LoginMoIP { xml.text attributes[:comissoes][:login_moip] }
+                    }
+                  }
+                } 
+              end 
             }
           }
         end

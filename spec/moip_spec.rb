@@ -9,7 +9,7 @@ describe "Make payments with the MoIP API" do
 
   before :all do
 
-    @pagador = { :nome => "Luiz Inácio Lula da Silva",
+    @pagador = {:nome => "Luiz Inácio Lula da Silva",
                 :login_moip => "lula",
                 :email => "presidente@planalto.gov.br",
                 :tel_cel => "(61)9999-9999",
@@ -25,16 +25,19 @@ describe "Make payments with the MoIP API" do
                 :cep => "70100-000",
                 :tel_fixo => "(61)3211-1221" }
 
-    @comissionamento = { :razao => "Quero um pouco tambem.", :valor_percentual => "10%", 
-                         :valor_fixo => "100" }
-
     @billet_without_razao = { :valor => "8.90", :id_proprio => "qualquer_um",
                               :forma => "BoletoBancario", :pagador => @pagador}
     
     @billet = { :valor => "8.90", :id_proprio => "qualquer_um",
                 :forma => "BoletoBancario", :pagador => @pagador ,
                 :razao=> "Pagamento" }
-    
+
+    @comissionamento = {:razao => "Quero um pouco tambem.", 
+                        :valor_percentual => "10%", 
+                        :valor_fixo => "100",
+                        :mostrar_para_pagador => false,
+                        :login_moip => "moleza" }
+                            
     @billet_with_comission = { :valor => "8.90", :id_proprio => "qualquer um", :forma => "BoletoBancario", 
                                :pagador => @pagador , :razao=> "Pagamento", :comissoes => @comissionamento }
 
@@ -167,6 +170,11 @@ describe "Make payments with the MoIP API" do
     it "should raise invalid value error if -1" do
       @credit[:valor] = -1
       lambda { MoIP::Client.checkout(@credit) }.should raise_error(MoIP::InvalidValue)
+    end
+    
+    it "should has a fixed comission of $100" do
+      puts "===============================================> #{@billet_with_comission}"
+      @billet_with_comission[:comissoes][:valor_fixo].should eql "100"
     end
   end
 end
