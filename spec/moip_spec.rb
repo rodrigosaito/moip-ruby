@@ -25,23 +25,32 @@ describe "Make payments with the MoIP API" do
                 :cep => "70100-000",
                 :tel_fixo => "(61)3211-1221" }
 
-    @billet_without_razao = { :valor => "8.90", :id_proprio => id,
+    @comissionamento = { :razao => "Quero um pouco tambem.", :valor_percentual => "10%", 
+                         :valor_fixo => "100" }
+
+    @billet_without_razao = { :valor => "8.90", :id_proprio => "qualquer_um",
                               :forma => "BoletoBancario", :pagador => @pagador}
-    @billet = { :valor => "8.90", :id_proprio => id,
+    
+    @billet = { :valor => "8.90", :id_proprio => "qualquer_um",
                 :forma => "BoletoBancario", :pagador => @pagador ,
                 :razao=> "Pagamento" }
+    
+    @billet_with_comission = { :valor => "8.90", :id_proprio => "qualquer um", :forma => "BoletoBancario", 
+                               :pagador => @pagador , :razao=> "Pagamento", :comissoes => @comissionamento }
 
-    @debit = { :valor => "8.90", :id_proprio => id, :forma => "DebitoBancario",
+
+    @debit = { :valor => "8.90", :id_proprio => "qualquer_um", :forma => "DebitoBancario",
                :instituicao => "BancoDoBrasil", :pagador => @pagador,
                :razao => "Pagamento"}
 
-    @credit = { :valor => "8.90", :id_proprio => id, :forma => "CartaoCredito",
+    @credit = { :valor => "8.90", :id_proprio => "qualquer_um", :forma => "CartaoCredito",
                 :instituicao => "AmericanExpress",:numero => "345678901234564",
                 :expiracao => "08/11", :codigo_seguranca => "1234",
                 :nome => "João Silva", :identidade => "134.277.017.00",
                 :telefone => "(21)9208-0547", :data_nascimento => "25/10/1980",
                 :parcelas => "2", :recebimento => "AVista",
                 :pagador => @pagador, :razao => "Pagamento"}
+    
   end
 
   context "misconfigured" do
