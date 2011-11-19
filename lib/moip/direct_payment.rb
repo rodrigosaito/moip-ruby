@@ -171,7 +171,14 @@ module MoIP
                   xml.text attributes[:url_retorno]
                 }
               end
-                
+              
+              xml.Comissoes {
+                xml.Comissionamento {
+                  xml.Razao { xml.text attributes[:razao] }
+                  xml.ValorPercentual { xml.text attributes[:valor_percentual] }
+                  xml.ValorFixo { xml.text attributes[:valor_fixo] }
+                }
+              }  
             }
           }
         end
