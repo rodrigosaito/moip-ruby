@@ -27,7 +27,7 @@ module MoIP
   TipoRecebimento = %w{AVista Parcelado}
   TipoRestricao = %w{Autorizacao Pagamento}
   TipoStatus = %w{Sucesso Falha}
-  
+
   #
   TiposComInstituicao = %w{CartaoCredito CartaoCredito DebitoBancario}
 
@@ -164,14 +164,21 @@ module MoIP
                   }
                 }
               end
-              
+
               if attributes[:url_retorno]
                 # URL de retorno
                 xml.URLRetorno {
                   xml.text attributes[:url_retorno]
                 }
               end
-              
+
+              if !attributes[:recebedor].nil?
+                xml.Recebedor {
+                  xml.LoginMoIP { xml.text attributes[:recebedor][:login_moip] }
+                  xml.Apelido { xml.text attributes[:recebedor][:apelido] }
+                }
+              end
+
               if !attributes[:comissoes].nil?
                 xml.Comissoes {
                   xml.Comissionamento {
@@ -184,8 +191,9 @@ module MoIP
                       xml.LoginMoIP { xml.text attributes[:comissoes][:login_moip] }
                     }
                   }
-                } 
-              end 
+                }
+              end
+
             }
           }
         end

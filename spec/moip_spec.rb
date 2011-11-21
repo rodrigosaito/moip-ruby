@@ -25,20 +25,22 @@ describe "Make payments with the MoIP API" do
                 :cep => "70100-000",
                 :tel_fixo => "(61)3211-1221" }
 
+    @receiver = {:login_moip => "moip-ruby", :apelido => "moip_ruby"}
+
     @billet_without_razao = { :valor => "8.90", :id_proprio => "qualquer_um",
                               :forma => "BoletoBancario", :pagador => @pagador}
-    
+
     @billet = { :valor => "8.90", :id_proprio => "qualquer_um",
                 :forma => "BoletoBancario", :pagador => @pagador ,
                 :razao=> "Pagamento" }
 
-    @comissionamento = {:razao => "Quero um pouco tambem.", 
-                        :valor_percentual => "10%", 
+    @comissionamento = {:razao => "Quero um pouco tambem.",
+                        :valor_percentual => "10%",
                         :valor_fixo => "100",
                         :mostrar_para_pagador => false,
                         :login_moip => "moleza" }
-                            
-    @billet_with_comission = { :valor => "8.90", :id_proprio => "qualquer um", :forma => "BoletoBancario", 
+
+    @billet_with_comission = { :valor => "8.90", :id_proprio => "qualquer um", :forma => "BoletoBancario",
                                :pagador => @pagador , :razao=> "Pagamento", :comissoes => @comissionamento }
 
 
@@ -53,7 +55,7 @@ describe "Make payments with the MoIP API" do
                 :telefone => "(21)9208-0547", :data_nascimento => "25/10/1980",
                 :parcelas => "2", :recebimento => "AVista",
                 :pagador => @pagador, :razao => "Pagamento"}
-    
+
   end
 
   context "misconfigured" do
@@ -67,59 +69,59 @@ describe "Make payments with the MoIP API" do
       MoIP::Client # for autoload
       lambda { MoIP::Client.checkout(@billet) }.should raise_error(MoIP::MissingConfigError)
     end
-    
+
     it "should raise a missing token error when token is nil" do
       MoIP.setup do |config|
         config.uri = 'https://desenvolvedor.moip.com.br/sandbox'
         config.token = nil
         config.key = 'key'
       end
-      
+
       MoIP::Client # for autoload
       lambda { MoIP::Client.checkout(@billet) }.should raise_error(MoIP::MissingTokenError)
     end
-    
+
     it "should raise a missing key error when key is nil" do
-      
+
       MoIP.setup do |config|
         config.uri = 'https://desenvolvedor.moip.com.br/sandbox'
         config.token = 'token'
         config.key = nil
       end
-      
+
       MoIP::Client # for autoload
       lambda { MoIP::Client.checkout(@billet) }.should raise_error(MoIP::MissingKeyError)
     end
-    
-    
-    
+
+
+
     it "should raise a missing token error when token is empty" do
       MoIP.setup do |config|
         config.uri = 'https://desenvolvedor.moip.com.br/sandbox'
         config.token = ''
         config.key = 'key'
       end
-      
+
       MoIP::Client # for autoload
       lambda { MoIP::Client.checkout(@billet) }.should raise_error(MoIP::MissingTokenError)
     end
-    
+
     it "should raise a missing key error when key is empty" do
-      
+
       MoIP.setup do |config|
         config.uri = 'https://desenvolvedor.moip.com.br/sandbox'
         config.token = 'token'
         config.key = ''
       end
-      
+
       MoIP::Client # for autoload
       lambda { MoIP::Client.checkout(@billet) }.should raise_error(MoIP::MissingKeyError)
     end
   end
-  
+
   context "validations" do
 
-    
+
     before(:each) do
       MoIP.setup do |config|
         config.uri = 'https://desenvolvedor.moip.com.br/sandbox'
@@ -171,9 +173,8 @@ describe "Make payments with the MoIP API" do
       @credit[:valor] = -1
       lambda { MoIP::Client.checkout(@credit) }.should raise_error(MoIP::InvalidValue)
     end
-    
-    it "should has a fixed comission of $100" do
-      puts "===============================================> #{@billet_with_comission}"
+
+    it "should have a fixed comission of $100" do
       @billet_with_comission[:comissoes][:valor_fixo].should eql "100"
     end
   end
